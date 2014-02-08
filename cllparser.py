@@ -27,7 +27,7 @@ def parse_lines(lns):
             if sp == 0: break
             spacesmin = min(sp,spacesmin)
             i += 1
-        child_block = map(lambda x:x[spacesmin:],lns[start_child_block:i])
+        child_block = list(map(lambda x:x[spacesmin:],lns[start_child_block:i]))
         # Calls parse_line to parse the individual line
         out = parse_line(main)
         # Include the child block into the parsed expression
@@ -154,7 +154,7 @@ def shunting_yard(tokens):
             elif tok == ')' and len(args) and args[0] != 'id':
                 oq.append(['fun'] + args)
             else:
-                oq.append(args[1])
+                oq.append(args[0])
     # The main loop
     while len(iq) > 0:
         prev = tok
@@ -184,7 +184,7 @@ def shunting_yard(tokens):
             stack.append(tok)
         elif typ == 'comma':
             while len(stack) and stack[-1] != 'lparen': popstack(stack,oq)
-        #print 'iq',iq,'stack',stack,'oq',oq
+        #print ('iq',iq,'stack',stack,'oq',oq)
     while len(stack):
         popstack(stack,oq)
     if len(oq) == 1:
